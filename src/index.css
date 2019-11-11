@@ -45,3 +45,18 @@ body {
   font-size: 1rem;
   font-weight: 300;
 }
+
+img {
+  width: 750px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}

@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import Display from '../display/Display';
-import Controls from '../controls/Controls';
+import Display from "../display/Display";
+import Controls from "../controls/Controls";
 
 class Dashboard extends React.Component {
   state = {
     locked: false,
-    closed: false,
+    closed: false
   };
 
   render() {
@@ -14,6 +14,8 @@ class Dashboard extends React.Component {
 
     return (
       <>
+        <h1>My Gate</h1>
+        <img src={require("../imgs/gateproject.jpg")} className="stars" />
         <Display locked={locked} closed={closed} />
         <Controls
           locked={locked}
@@ -21,6 +23,7 @@ class Dashboard extends React.Component {
           toggleLocked={this.toggleLocked}
           toggleClosed={this.toggleClosed}
         />
+        <img src={require("../imgs/gateprojectone.jpg")} className="garden" />
       </>
     );
   }
