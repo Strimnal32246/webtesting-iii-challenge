@@ -1,27 +1,47 @@
 // Test away!
 
 import React from "react";
-import { render, fireEvent } from "react-testing-library";
-import "jest-dom/extend-expect";
-import "react-testing-library/cleanup-after-each";
-
-import Controls from "./Controls.js";
+import { render, fireEvent } from "@testing-library/react";
+import "@testing-library/react/cleanup-after-each";
+import Controls from "./Controls";
 
 describe("<Controls />", () => {
-  it("button is disabled", () => {
-    const { getByText, getByTestId, container } = render(
-      <Controls locked={true} closed={true} />
+  it("open and unlock", () => {
+    const mock = jest.fn();
+    const { queryByText } = render(
+      <Controls locked={false} closed={false} toggleClosed={mock} />
     );
-
-    const disabledButton = getByText(/disabled/i);
-
-
-    expect(getByTestId(container, disabledButton)).toBeDisabled();
-
-    expect(disabledButton).toHaveAttribute("disabled");
+    const lockButton = queryByText("Lock Gate");
+    expect(lockButton.disabled).toBe(true);
+    const closeButton = queryByText("Close Gate");
+    expect(closeButton.disabled).toBe(false);
+    fireEvent.click(closeButton);
+    expect(mock).toBeCalled();
   });
 
-  it("unmounts component after each test", () => {
-    console.log(document.body.outerHTML);
+  it("closed and unlock", () => {
+    const mock = jest.fn();
+    const { queryByText } = render(
+      <Controls locked={false} closed={true} toggleClosed={mock} />
+    );
+    const lockButton = queryByText("Lock Gate");
+    expect(lockButton.disabled).toBe(false);
+    const openButton = queryByText("Open Gate");
+    expect(openButton.disabled).toBe(false);
+    fireEvent.click(openButton);
+    expect(mock).toBeCalled();
+  });
+
+  it("closed and locked", () => {
+    const mock = jest.fn();
+    const { queryByText } = render(
+      <Controls locked={true} closed={true} toggleLocked={mock} />
+    );
+    const unlockButton = queryByText("Unlock Gate");
+    expect(unlockButton.disabled).toBe(false);
+    const openButton = queryByText("Open Gate");
+    expect(openButton.disabled).toBe(true);
+    fireEvent.click(unlockButton);
+    expect(mock).toBeCalled();
   });
 });

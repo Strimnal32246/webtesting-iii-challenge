@@ -1,45 +1,45 @@
 // Test away
 import React from "react";
-import { render, fireEvent } from "react-testing-library";
-import "jest-dom/extend-expect";
-import "react-testing-library/cleanup-after-each";
-
-import Dashboard from "./Dashboard.js";
+import { render, fireEvent } from "@testing-library/react";
+import "@testing-library/react/cleanup-after-each";
+import Dashboard from "./Dashboard";
 
 describe("<Dashboard />", () => {
-  it("renders close, open and lock, unlock status", () => {
-    const { getByText, debug } = render(<Dashboard />);
-    debug();
-
-    getByText(/lock/i);
-    getByText(/close/i);
-    getByText(/open/i);
-    getByText(/unlocked/i);
+  it("has default state of (Unlocked, Open, Lock Gate, Close Gate)", () => {
+    const { getByText } = render(<Dashboard />);
+    expect(getByText("Unlocked"));
+    expect(getByText("Open"));
+    expect(getByText("Lock Gate"));
+    expect(getByText("Close Gate"));
   });
+  it("has buttons that change state", () => {
+    const { getByText, queryByText } = render(<Dashboard />);
+    const closeButton = queryByText("Close Gate");
+    fireEvent.click(closeButton);
+    expect(getByText("Unlocked"));
+    expect(getByText("Closed"));
+    expect(getByText("Lock Gate"));
+    expect(getByText("Open Gate"));
 
-  it("renders the display", () => {
-    const { getByTestId } = render(<Dashboard />);
-    const display = getByTestId("display");
-    expect(display).toHaveClass("display panel");
-  });
+    const lockButton = queryByText("Lock Gate");
+    fireEvent.click(lockButton);
+    expect(getByText("Locked"));
+    expect(getByText("Closed"));
+    expect(getByText("Unlock Gate"));
+    expect(getByText("Open Gate"));
 
-  it("renders the controls", () => {
-    const { getByTestId } = render(<Dashboard />);
-    const controls = getByTestId("controls");
-    expect(controls).toHaveClass("controls panel");
-  });
+    const unlockButton = queryByText("Unlock Gate");
+    fireEvent.click(lockButton);
+    expect(getByText("Unlocked"));
+    expect(getByText("Closed"));
+    expect(getByText("Lock Gate"));
+    expect(getByText("Open Gate"));
 
-  it("renders display and controls", () => {
-    const { getByTestId } = render(<Dashboard />);
-
-    const display = getByTestId("display");
-    const controls = getByTestId("controls");
-
-    expect(display).toBeInTheDocument();
-    expect(controls).toBeInTheDocument();
-  });
-
-  it("unmounts component after each test", () => {
-    console.log(document.body.outerHTML);
+    const openButton = queryByText("Open Gate");
+    fireEvent.click(openButton);
+    expect(getByText("Unlocked"));
+    expect(getByText("Open"));
+    expect(getByText("Lock Gate"));
+    expect(getByText("Close Gate"));
   });
 });
